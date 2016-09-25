@@ -10,6 +10,7 @@
 * X's start first.
 * Keep things fun. You're play tic tac toe after all. Maybe borrow from Dr. Seuss.
 * Always validate token.
+* Enforce 3000 millisecond timeout
 
 # First Iteration
 * Number grid positions 1-9
