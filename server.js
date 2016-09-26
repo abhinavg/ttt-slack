@@ -2,9 +2,10 @@ const help = require('./help');
 const models = require('./models');
 
 class TTTServer {
-  constructor(app, token) {
+  constructor(app, db, token) {
     this.token = token;
     this.app = app;
+    this.db = db;
     this.verifySlackToken = this.verifySlackToken.bind(this);
     this.setupRoutes = this.setupRoutes.bind(this);
     this.listen = this.listen.bind(this);
