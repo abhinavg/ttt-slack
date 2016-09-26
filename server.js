@@ -37,8 +37,8 @@ class TTTServer {
         cmd = help.HelpCmd;
         break;
       case models.Commands.Challenge:
-        cmd = new challenge.ChallengeCmd(this.db, body.team_id, body.channel_id, body.user_name,
-          splitText);
+        cmd = new challenge.ChallengeCmd(this.db, body.team_id, body.channel_id,
+          `@${body.user_name}`, splitText);
         break;
       default:
         cmd = help.InvalidCmd;

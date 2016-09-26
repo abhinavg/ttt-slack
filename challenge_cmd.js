@@ -6,7 +6,8 @@ const InvalidChallengeResponse = {
 };
 
 class ChallengeCmd {
-  constructor(db, channelID, teamID, username, argv) {
+  constructor(db, teamID, channelID, username, argv) {
+    this.db = db;
     this.teamID = teamID;
     this.channelID = channelID;
     this.challenger = username;
@@ -14,6 +15,8 @@ class ChallengeCmd {
     if (argv.length === 2) {
       this.challenged = argv[1];
     }
+    this.isValidCmd = this.isValidCmd.bind(this);
+    this.run = this.run.bind(this);
   }
 
   isValidCmd() {
