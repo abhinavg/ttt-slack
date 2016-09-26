@@ -1,7 +1,9 @@
 const models = require('./models');
 const response = require('./response');
 
-const HelpText = `Get this help text: \`/ttt ${models.Commands.Help}\``;
+const HelpText = `Get this help text: \`/ttt ${models.Commands.Help}\`
+Challenge someone to a game: \`/ttt ${models.Commands.Challenge} @username\`
+`;
 
 const HelpResponse = {
   text: HelpText,

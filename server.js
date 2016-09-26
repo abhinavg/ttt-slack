@@ -1,3 +1,4 @@
+const challenge = require('./challenge_cmd');
 const help = require('./help');
 const models = require('./models');
 
@@ -9,6 +10,7 @@ class TTTServer {
     this.verifySlackToken = this.verifySlackToken.bind(this);
     this.setupRoutes = this.setupRoutes.bind(this);
     this.listen = this.listen.bind(this);
+    this.postRoute = this.postRoute.bind(this);
   }
 
   static verifyCommand(req, res, next) {
@@ -25,7 +27,7 @@ class TTTServer {
     return res.status(400).send(`Invalid token "${req.body.token}"`);
   }
 
-  postRoute(req, res) {
+  postRoute(req, res, next) {
     console.log(`Request Body: ${JSON.stringify(req.body)}`);
     const splitText = (req.body.text || '').split(' ');
     switch (splitText[0]) {
@@ -33,6 +35,17 @@ class TTTServer {
       case models.Commands.Help:
         res.json(help.HelpResponse);
         break;
+      case models.Commands.Challenge: {
+        const cmd = new challenge.ChallengeCmd(this.db, req.body.team_id, req.body.channel_id,
+          req.body.user_name, splitText);
+        cmd.run((err, response) => {
+          if (err) {
+            return next(err);
+          }
+          return res.json(response);
+        });
+        break;
+      }
       default:
         res.json(help.InvalidCmdResponse);
         break;
