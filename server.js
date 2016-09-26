@@ -30,26 +30,26 @@ class TTTServer {
   postRoute(req, res, next) {
     console.log(`Request Body: ${JSON.stringify(req.body)}`);
     const splitText = (req.body.text || '').split(' ');
+    let cmd;
     switch (splitText[0]) {
       case '':
       case models.Commands.Help:
-        res.json(help.HelpResponse);
+        cmd = help.HelpCmd;
         break;
-      case models.Commands.Challenge: {
-        const cmd = new challenge.ChallengeCmd(this.db, req.body.team_id, req.body.channel_id,
+      case models.Commands.Challenge:
+        cmd = new challenge.ChallengeCmd(this.db, req.body.team_id, req.body.channel_id,
           req.body.user_name, splitText);
-        cmd.run((err, response) => {
-          if (err) {
-            return next(err);
-          }
-          return res.json(response);
-        });
         break;
-      }
       default:
-        res.json(help.InvalidCmdResponse);
+        cmd = help.InvalidCmd;
         break;
     }
+    cmd.run((err, response) => {
+      if (err) {
+        return next(err);
+      }
+      return res.json(response);
+    });
   }
 
   setupRoutes() {
