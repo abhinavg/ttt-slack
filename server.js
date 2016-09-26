@@ -25,21 +25,23 @@ class TTTServer {
     return res.status(400).send(`Invalid token "${req.body.token}"`);
   }
 
+  postRoute(req, res) {
+    console.log(`Request Body: ${JSON.stringify(req.body)}`);
+    const splitText = (req.body.text || '').split(' ');
+    switch (splitText[0]) {
+      case '':
+      case models.Commands.Help:
+        res.json(help.HelpResponse);
+        break;
+      default:
+        res.json(help.InvalidCmdResponse);
+        break;
+    }
+  }
+
   setupRoutes() {
     const verifySlashTTTReq = [this.verifySlackToken, TTTServer.verifyCommand];
-    this.app.post('/slash/ttt', ...verifySlashTTTReq, (req, res) => {
-      console.log(`Request Body: ${JSON.stringify(req.body)}`);
-      const splitText = (req.body.text || '').split(' ');
-      switch (splitText[0]) {
-        case '':
-        case models.Commands.Help:
-          res.json(help.HelpResponse);
-          break;
-        default:
-          res.json(help.InvalidCmdResponse);
-          break;
-      }
-    });
+    this.app.post('/slash/ttt', ...verifySlashTTTReq, this.postRoute);
   }
 
   listen(port) {
