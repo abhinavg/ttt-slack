@@ -17,11 +17,6 @@ module.exports = {
   Values,
 };
 
-// GameUser
-// {id: string, value: Value}
-
-// State: [postion: Value] * 9
-
 // Game
 // {
 //   id,
@@ -36,4 +31,4 @@ module.exports = {
 //   end_time
 // }
 
-// Move - id, game, index, position, user_id, value
+// Move - id, game, index, position, user_id, value, timestamp
