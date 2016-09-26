@@ -44,7 +44,7 @@ class TTTServer {
 
   listen(port) {
     this.app.listen(port, () => {
-      console.log(`Example app listening on port ${port}!`);
+      console.log(`TTT server listening on port ${port}!`);
     });
   }
 }
