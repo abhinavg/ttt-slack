@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 
 const help = require('./help');
+const models = require('./models');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -35,9 +36,10 @@ app.get('/', (req, res) => {
 
 app.post('/slash/ttt', ...verifySlashTTTReq, (req, res) => {
   console.log(`Request Body: ${JSON.stringify(req.body)}`);
-  switch (req.body.text) {
+  const splitText = (req.body.text || '').split(' ');
+  switch (splitText[0]) {
     case '':
-    case 'help':
+    case models.Commands.Help:
       res.json(help.HelpResponse);
       break;
     default:

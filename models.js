@@ -11,7 +11,13 @@ for (const postion of Positions) {
   EmptyState[postion] = Values.Empty;
 }
 
+const Commands = {
+  Help: 'help',
+  Challenge: 'challenge',
+};
+
 module.exports = {
+  Commands,
   EmptyState,
   Positions,
   Values,
