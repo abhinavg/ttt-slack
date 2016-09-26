@@ -20,19 +20,29 @@ function verifySlackToken(req, res, next) {
   return res.status(400).send(`Invalid token "${req.body.token}"`);
 }
 
+function verifyCommand(req, res, next) {
+  if (req.body.command === '/ttt') {
+    return next();
+  }
+  return res.status(400).send(`Invalid command "${req.body.token}"`);
+}
+
+const verifySlashTTTReq = [verifySlackToken, verifyCommand];
+
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.post('/slash/ttt', verifySlackToken, (req, res) => {
+app.post('/slash/ttt', ...verifySlashTTTReq, (req, res) => {
   console.log(`Request Body: ${JSON.stringify(req.body)}`);
-  switch (req.body.command) {
-    case '/ttt':
-    case '/ttt help':
+  switch (req.body.text) {
+    case '':
+    case 'help':
       res.json(help.HelpResponse);
       break;
     default:
       res.json(help.InvalidCmdResponse);
+      break;
   }
 });
 
