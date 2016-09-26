@@ -16,10 +16,16 @@ const Commands = {
   Challenge: 'challenge',
 };
 
+const ResponseTypes = {
+  Ephemeral: 'ephemeral',
+  InChannel: 'in_channel',
+};
+
 module.exports = {
   Commands,
   EmptyState,
   Positions,
+  ResponseTypes,
   Values,
 };
 

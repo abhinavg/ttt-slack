@@ -1,9 +1,8 @@
 const models = require('./models');
-const response = require('./response');
 
 const InvalidChallengeResponse = {
   text: `I didn't understand that command. Challenge a user using \`/ttt ${models.Commands.Challenge} @username\``,
-  response_type: response.ResponseTypes.Ephemeral,
+  response_type: models.ResponseTypes.Ephemeral,
 };
 
 class ChallengeCmd {
@@ -38,7 +37,7 @@ class ChallengeCmd {
       }
       const validResponse = {
         text: `Game created. ${game.next_move} has first turn.`,
-        response_type: response.ResponseTypes.InChannel,
+        response_type: models.ResponseTypes.InChannel,
       };
       return cb(null, validResponse);
     });
