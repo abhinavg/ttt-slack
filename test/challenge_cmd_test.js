@@ -9,10 +9,10 @@ describe('Challenge command', () => {
   const testChanID = 'test_channel_id';
   const testUser1 = '@user1';
   const testUser2 = '@user2';
-  const testUsers = {
-    '@user1': models.Values.Cross,
-    '@user2': models.Values.Naught,
-  };
+  const testUsers = [
+    { username: '@user1', value: models.Values.Cross },
+    { username: '@user2', value: models.Values.Naught },
+  ];
 
   describe('run', () => {
     it('returns response with command explanation if invalid input', (done) => {
@@ -52,7 +52,7 @@ describe('Challenge command', () => {
       const cmd = new challenge.ChallengeCmd(db, testTeamID, testChanID, testUser1, argv);
       cmd.run((err) => {
         assert.equal(db.createGame.callCount, 1);
-        const expectedArgs = [testTeamID, testChanID, testUsers, testUser2];
+        const expectedArgs = [testTeamID, testChanID, testUsers, 1];
         assert.deepEqual(db.createGame.firstCall.args.slice(0, 4), expectedArgs);
         assert.equal(err, testErr);
         done();
@@ -71,7 +71,7 @@ describe('Challenge command', () => {
       cmd.run((err, resp) => {
         assert.ifError(err);
         assert.equal(db.createGame.callCount, 1);
-        const expectedArgs = [testTeamID, testChanID, testUsers, testUser2];
+        const expectedArgs = [testTeamID, testChanID, testUsers, 1];
         assert.deepEqual(db.createGame.firstCall.args.slice(0, 4), expectedArgs);
         const expectedResp = {
           response_type: models.ResponseTypes.InChannel,

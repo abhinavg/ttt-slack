@@ -17,13 +17,13 @@ class DB {
     this.gamesCollection.findOne(query, cb);
   }
 
-  createGame(teamID, channelID, users, firstUser, cb) {
+  createGame(teamID, channelID, users, nextMoveIndex, cb) {
     const game = {
       active: true,
       channel_id: channelID,
       state: models.EmptyState,
       start_time: Date.now(),
-      next_move: firstUser,
+      next_move_index: nextMoveIndex,
       team_id: teamID,
       users,
     };

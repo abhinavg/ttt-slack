@@ -11,10 +11,10 @@ describe('DB class', () => {
   let db = null;
   const clearDB = cb => db.gamesCollection.deleteMany({}, cb);
   const fakeClock = sinon.useFakeTimers(123456, 'Date');
-  const testUsers = {
-    user1: models.Naught,
-    user2: models.Cross,
-  };
+  const testUsers = [
+    { username: '@user1', value: models.Values.Naught },
+    { username: '@user2', value: models.Values.Cross },
+  ];
   const testTeamID = 'test_team_id';
   const testChanID = 'testChanID';
 
@@ -48,7 +48,7 @@ describe('DB class', () => {
     it('creates an active game with correct information set', (done) => {
       async.auto({
         createGame: (cbAuto) => {
-          db.createGame(testTeamID, testChanID, testUsers, 'user1', cbAuto);
+          db.createGame(testTeamID, testChanID, testUsers, 1, cbAuto);
         },
         getGame: ['createGame', (results, cbAuto) => {
           db.getActiveGame(testTeamID, testChanID, cbAuto);
@@ -58,7 +58,7 @@ describe('DB class', () => {
         assert.equal(createGame.team_id, testTeamID);
         assert.equal(createGame.channel_id, testChanID);
         assert.deepEqual(createGame.users, testUsers);
-        assert.equal(createGame.next_move, 'user1');
+        assert.equal(createGame.next_move_index, 1);
         assert.deepEqual(createGame.state, models.EmptyState);
         assert(createGame.active);
         assert.equal(createGame.start_time, 123456);

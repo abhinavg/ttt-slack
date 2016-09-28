@@ -38,11 +38,12 @@ class ChallengeCmd {
     if (this.challenged === this.challenger) {
       return setImmediate(cb, null, SelfChallengeResponse);
     }
-    const users = {};
-    users[this.challenger] = models.Values.Cross;
-    users[this.challenged] = models.Values.Naught;
+    const users = [
+      { username: this.challenger, value: models.Values.Cross },
+      { username: this.challenged, value: models.Values.Naught },
+    ];
     // TODO: Handle the case when an active game exists.
-    return this.db.createGame(this.teamID, this.channelID, users, this.challenged, (err, game) => {
+    return this.db.createGame(this.teamID, this.channelID, users, 1, (err, game) => {
       if (err) {
         return cb(err);
       }

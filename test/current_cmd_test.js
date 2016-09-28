@@ -75,6 +75,7 @@ describe('Current command', () => {
           response_type: models.ResponseTypes.InChannel,
           attachments: [{
             title: 'Current Game',
+            fallback: '@user2 has the next move',
             fields: [
               { title: 'X', value: '@user1', short: true },
               { title: 'O', value: '@user2', short: true },
@@ -93,7 +94,6 @@ describe('Current command', () => {
                 short: true,
               },
             ],
-            fallback: '@user2 has the next move',
             mrkdwn_in: ['fields'],
           }],
         };
