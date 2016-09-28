@@ -8,7 +8,7 @@ class DB {
   }
 
   // Filters out inactive games.
-  gameByTeamAndChannel(teamID, channelID, cb) {
+  getActiveGame(teamID, channelID, cb) {
     const query = {
       team_id: teamID,
       channel_id: channelID,

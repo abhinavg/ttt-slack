@@ -8,18 +8,35 @@ const models = require('../models');
 
 describe('DB class', () => {
   const dbConnString = 'mongodb://localhost:27017/db_test';
-  const getDBClient = (cb) => {
-    mongodb.MongoClient.connect(dbConnString, cb);
-  };
-  const clearDB = (cb) => {
-    async.auto({
-      db: getDBClient,
-      clear: ['db', ({ db }, cbAuto) => {
-        db.dropDatabase(cbAuto);
-      }],
-    }, cb);
-  };
+  let db = null;
+  const clearDB = cb => db.gamesCollection.deleteMany({}, cb);
   const fakeClock = sinon.useFakeTimers(123456, 'Date');
+  const testUsers = {
+    user1: models.Naught,
+    user2: models.Cross,
+  };
+  const testTeamID = 'test_team_id';
+  const testChanID = 'testChanID';
+
+  before((done) => {
+    async.auto({
+      dbClient: cbAuto => mongodb.MongoClient.connect(dbConnString, cbAuto),
+      dbObj: ['dbClient', ({ dbClient }, cbAuto) => {
+        cbAuto(null, new dbModule.DB(dbClient));
+      }],
+      createIndex: ['dbObj', ({ dbObj }, cbAuto) => {
+        dbObj.gamesCollection.createIndex({
+          team_id: 1, channel_id: 1,
+        }, {
+          unique: true,
+          partialFilterExpression: { active: true },
+        }, cbAuto);
+      }],
+    }, (err, results) => {
+      db = results.dbObj;
+      done(err);
+    });
+  });
 
   after(() => {
     fakeClock.restore();
@@ -29,22 +46,12 @@ describe('DB class', () => {
     beforeEach(clearDB);
 
     it('creates an active game with correct information set', (done) => {
-      const testUsers = {
-        user1: models.Naught,
-        user2: models.Cross,
-      };
-      const testTeamID = 'test_team_id';
-      const testChanID = 'testChanID';
       async.auto({
-        dbClient: getDBClient,
-        db: ['dbClient', ({ dbClient }, cbAuto) => {
-          cbAuto(null, new dbModule.DB(dbClient));
-        }],
-        createGame: ['db', ({ db }, cbAuto) => {
+        createGame: (cbAuto) => {
           db.createGame(testTeamID, testChanID, testUsers, 'user1', cbAuto);
-        }],
-        getGame: ['db', 'createGame', ({ db }, cbAuto) => {
-          db.gameByTeamAndChannel(testTeamID, testChanID, cbAuto);
+        },
+        getGame: ['createGame', (results, cbAuto) => {
+          db.getActiveGame(testTeamID, testChanID, cbAuto);
         }],
       }, (err, { createGame, getGame }) => {
         assert.ifError(err);
