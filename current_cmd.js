@@ -7,7 +7,7 @@ const NoActiveGameResponse = {
 };
 
 const InvalidCurrentResponse = {
-  text: 'I didn\'t understand that. Did you mean to see current state using `/ttt current`?',
+  text: 'I didn\'t understand that. Did you mean to see current game using `/ttt current`?',
   response_type: models.ResponseTypes.Ephemeral,
 };
 
