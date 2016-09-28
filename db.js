@@ -66,7 +66,7 @@ class DB {
     const now = Date.now();
     async.auto({
       updateGame: cbAuto => this.gamesCollection.updateOne({ _id: game._id }, updatedGame, cbAuto),
-      recordMove: ['updatedGame', (results, cbAuto) => {
+      recordMove: ['updateGame', (results, cbAuto) => {
         this.movesCollection.insertOne({
           game_id: game._id,
           username: game[userIndex].username,
