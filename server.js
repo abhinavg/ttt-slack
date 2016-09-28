@@ -44,6 +44,10 @@ class TTTServer {
       case models.Commands.Current:
         cmd = new current.CurrentCmd(this.db, body.team_id, body.channel_id, splitText);
         break;
+      case models.Commands.Move:
+        cmd = new challenge.ChallengeCmd(this.db, body.team_id, body.channel_id,
+          `@${body.user_name}`, splitText);
+        break;
       default:
         cmd = help.InvalidCmd;
         break;

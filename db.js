@@ -1,3 +1,7 @@
+const async = require('async');
+const lodash = require('lodash');
+
+const grid = require('./grid');
 const models = require('./models');
 
 class DB {
@@ -5,6 +9,27 @@ class DB {
   constructor(client) {
     this.db = client;
     this.gamesCollection = client.collection('games');
+    this.movesCollection = client.collection('moves');
+  }
+
+  static computeUpdatedGame(game, userIndex, position) {
+    const updatedGame = lodash.clone(game);
+    const value = game.users[userIndex].value;
+    updatedGame.state[position] = value;
+    if (grid.hasLine(updatedGame, value)) {
+      updatedGame.winner_index = userIndex;
+      updatedGame.active = false;
+      updatedGame.end_time = Date.now();
+      updatedGame.next_move_index = null;
+    } else if (grid.allPositionsFilled(updatedGame.state)) {
+      updatedGame.winner_index = null;
+      updatedGame.active = false;
+      updatedGame.end_time = Date.now();
+      updatedGame.next_move_index = null;
+    } else {
+      updatedGame.next_move_index = (userIndex + 1) % game.users.length;
+    }
+    return updatedGame;
   }
 
   // Filters out inactive games.
@@ -36,8 +61,26 @@ class DB {
     });
   }
 
-  updateGame(updatedGame, cb) {
-    this.gamesCollection.updateOne({ _id: updatedGame._id }, updatedGame, err => cb(err));
+  makeMove(game, userIndex, position, cb) {
+    const updatedGame = DB.computeUpdatedGame(game, userIndex, position);
+    const now = Date.now();
+    async.auto({
+      updateGame: cbAuto => this.gamesCollection.updateOne({ _id: game._id }, updatedGame, cbAuto),
+      recordMove: ['updatedGame', (results, cbAuto) => {
+        this.movesCollection.insertOne({
+          game_id: game._id,
+          username: game[userIndex].username,
+          value: game[userIndex].value,
+          position,
+          timestamp: now,
+        }, cbAuto);
+      }],
+    }, (err) => {
+      if (err) {
+        return cb(err);
+      }
+      return cb(null, updatedGame);
+    });
   }
 }
 

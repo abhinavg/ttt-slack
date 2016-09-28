@@ -29,6 +29,7 @@ const Commands = {
   Challenge: 'challenge',
   Current: 'current',
   Help: 'help',
+  Move: 'move',
 };
 
 const ResponseTypes = {
