@@ -5,6 +5,11 @@ const InvalidChallengeResponse = {
   response_type: models.ResponseTypes.Ephemeral,
 };
 
+const SelfChallengeResponse = {
+  text: 'Nice try, but you can\'t challenge yourself. Please pick someone else.',
+  response_type: models.ResponseTypes.Ephemeral,
+};
+
 class ChallengeCmd {
   constructor(db, teamID, channelID, username, argv) {
     this.db = db;
@@ -30,6 +35,9 @@ class ChallengeCmd {
     if (!this.isValidCmd()) {
       return setImmediate(cb, null, InvalidChallengeResponse);
     }
+    if (this.challenged === this.challenger) {
+      return setImmediate(cb, null, SelfChallengeResponse);
+    }
     const users = {};
     users[this.challenger] = models.Values.Cross;
     users[this.challenged] = models.Values.Naught;
@@ -49,5 +57,6 @@ class ChallengeCmd {
 
 module.exports = {
   InvalidChallengeResponse,
+  SelfChallengeResponse,
   ChallengeCmd,
 };

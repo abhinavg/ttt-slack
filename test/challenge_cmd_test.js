@@ -29,6 +29,20 @@ describe('Challenge command', () => {
       });
     });
 
+    it('returns an response with explanation if trying to challenge self', (done) => {
+      const db = {
+        createGame: sinon.spy(),
+      };
+      const argv = ['challenge', testUser1];
+      const cmd = new challenge.ChallengeCmd(db, testTeamID, testChanID, testUser1, argv);
+      cmd.run((err, resp) => {
+        assert.ifError(err);
+        assert.equal(resp, challenge.SelfChallengeResponse);
+        assert.equal(db.createGame.called, false);
+        done();
+      });
+    });
+
     it('returns an error if one received while creating game', (done) => {
       const testErr = new Error('test error');
       const db = {
