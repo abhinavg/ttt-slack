@@ -40,8 +40,9 @@ class CurrentCmd {
       short: true,
     });
     return {
-      text: 'Current Game',
       attachments: [{
+        title: 'Current Game',
+        fallback: `${game.next_move} has the next move`,
         fields: attachmentFields,
         mrkdwn_in: ['fields'],
       }],
