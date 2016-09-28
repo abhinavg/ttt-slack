@@ -1,18 +1,16 @@
+const lodash = require('lodash');
+
 const models = require('./models');
 
 const Separator = '|---+---+---|';
 
-function valueAtPositions(grid, positions) {
-  if (positions.length === 0) {
-    return null;
-  }
-  const firstValue = grid[positions[0]];
-  for (const pos of positions) {
-    if (grid[pos] !== firstValue) {
-      return null;
+function hasLine(grid, value) {
+  for (const line of models.AllLines) {
+    if (lodash.every(line, pos => grid[pos] === value)) {
+      return true;
     }
   }
-  return firstValue;
+  return false;
 }
 
 function hasLine(grid) {

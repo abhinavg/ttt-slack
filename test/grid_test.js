@@ -62,14 +62,16 @@ const renderedEmptyGrid = `
 describe('grid', () => {
   describe('hasLine', () => {
     it('returns line value in case grid has a line', () => {
-      assert.equal(grid.hasLine(gridWithHorizontalLine), 'X');
-      assert.equal(grid.hasLine(gridWithVerticalLine), 'O');
-      assert.equal(grid.hasLine(gridWithDiagonalLine), 'O');
+      assert.equal(grid.hasLine(gridWithHorizontalLine, 'X'), true);
+      assert.equal(grid.hasLine(gridWithVerticalLine, 'O'), true);
+      assert.equal(grid.hasLine(gridWithDiagonalLine, 'O'), true);
     });
 
     it('returns false in case grid have a valid line', () => {
-      assert.equal(grid.hasLine(gridWithNoLine), null);
-      assert.equal(grid.hasLine(models.EmptyState), null);
+      assert.equal(grid.hasLine(gridWithNoLine, 'O'), false);
+      assert.equal(grid.hasLine(models.EmptyState, 'O'), false);
+      assert.equal(grid.hasLine(gridWithNoLine, 'X'), false);
+      assert.equal(grid.hasLine(models.EmptyState, 'X'), false);
     });
   });
 
