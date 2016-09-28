@@ -35,6 +35,10 @@ class DB {
       return cb(null, game);
     });
   }
+
+  updateGame(updatedGame, cb) {
+    this.gamesCollection.updateOne({ _id: updatedGame._id }, updatedGame, err => cb(err));
+  }
 }
 
 module.exports = {
