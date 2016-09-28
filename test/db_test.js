@@ -67,4 +67,27 @@ describe('DB class', () => {
       });
     });
   });
+
+  describe('getActiveGame', () => {
+    beforeEach(clearDB);
+
+    it('calls cb with null game and no error if no active game found', (done) => {
+      async.auto({
+        insertGame: (cbAuto) => {
+          db.gamesCollection.insertOne({
+            team_id: testTeamID,
+            channel_id: testChanID,
+            active: false,
+          }, cbAuto);
+        },
+        getGame: ['insertGame', (results, cbAuto) => {
+          db.getActiveGame(testTeamID, testChanID, cbAuto);
+        }],
+      }, (err, { getGame }) => {
+        assert.ifError(err);
+        assert.equal(getGame, null);
+        done();
+      });
+    });
+  });
 });
