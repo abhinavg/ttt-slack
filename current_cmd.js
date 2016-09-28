@@ -1,10 +1,6 @@
+const cmdShared = require('./cmd_shared');
 const grid = require('./grid');
 const models = require('./models');
-
-const NoActiveGameResponse = {
-  text: `There is no active game in this channel. Challenge someone with \`/ttt ${models.Commands.Challenge} @username\``,
-  response_type: models.ResponseTypes.Ephemeral,
-};
 
 const InvalidCurrentResponse = {
   text: 'I didn\'t understand that. Did you mean to see current game using `/ttt current`?',
@@ -19,35 +15,6 @@ class CurrentCmd {
     this.argv = argv;
     this.isValidCmd = this.isValidCmd.bind(this);
     this.run = this.run.bind(this);
-  }
-
-  static currentGameResponse(game) {
-    const attachmentFields = [];
-    for (const username in game.users) {
-      attachmentFields.push({
-        title: game.users[username],
-        value: username,
-        short: true,
-      });
-    }
-    attachmentFields.push({
-      title: 'Board State',
-      value: `\`\`\`${grid.render(game.state)}\`\`\``,
-      short: true,
-    }, {
-      title: 'Next Move',
-      value: game.next_move,
-      short: true,
-    });
-    return {
-      attachments: [{
-        title: 'Current Game',
-        fallback: `${game.next_move} has the next move`,
-        fields: attachmentFields,
-        mrkdwn_in: ['fields'],
-      }],
-      response_type: models.ResponseTypes.InChannel,
-    };
   }
 
   isValidCmd() {
@@ -66,15 +33,14 @@ class CurrentCmd {
         return cb(err);
       }
       if (!game) {
-        return cb(null, NoActiveGameResponse);
+        return cb(null, cmdShared.NoActiveGameResponse);
       }
-      return cb(null, CurrentCmd.currentGameResponse(game));
+      return cb(null, cmdShared.currentGameResponse(game));
     });
   }
 }
 
 module.exports = {
   InvalidCurrentResponse,
-  NoActiveGameResponse,
   CurrentCmd,
 };
