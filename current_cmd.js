@@ -35,7 +35,7 @@ class CurrentCmd {
       if (!game) {
         return cb(null, cmdShared.NoActiveGameResponse);
       }
-      return cb(null, cmdShared.currentGameResponse(game));
+      return cb(null, cmdShared.getRenderGameResponse(game));
     });
   }
 }

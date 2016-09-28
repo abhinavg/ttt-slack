@@ -1,6 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 
+const cmdShared = require('../cmd_shared');
 const current = require('../current_cmd');
 const models = require('../models');
 
@@ -8,9 +9,12 @@ describe('Current command', () => {
   const testGame = {
     team_id: 'testTeamID',
     channel_id: 'test_channel_id',
-    users: { '@user1': models.Values.Cross, '@user2': models.Values.Naught },
+    users: [
+      { username: '@user1', value: models.Values.Cross },
+      { username: '@user2', value: models.Values.Naught },
+    ],
     state: models.EmptyState,
-    next_move: '@user2',
+    next_move_index: 1,
   };
 
   describe('run', () => {
@@ -36,7 +40,7 @@ describe('Current command', () => {
       const cmd = new current.CurrentCmd(db, testGame.team_id, testGame.channel_id, argv);
       cmd.run((err, resp) => {
         assert.ifError(err);
-        assert.equal(resp, current.NoActiveGameResponse);
+        assert.equal(resp, cmdShared.NoActiveGameResponse);
         assert.equal(db.getActiveGame.callCount, 1);
         const expectedArgs = [testGame.team_id, testGame.channel_id];
         assert.deepEqual(db.getActiveGame.firstCall.args.slice(0, 2), expectedArgs);
@@ -75,7 +79,6 @@ describe('Current command', () => {
           response_type: models.ResponseTypes.InChannel,
           attachments: [{
             title: 'Current Game',
-            fallback: '@user2 has the next move',
             fields: [
               { title: 'X', value: '@user1', short: true },
               { title: 'O', value: '@user2', short: true },
