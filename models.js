@@ -1,7 +1,7 @@
 const Values = {
   Naught: 'O',
   Cross: 'X',
-  Empty: null,
+  Empty: ' ',
 };
 
 const Positions = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
