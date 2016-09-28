@@ -46,19 +46,3 @@ module.exports = {
   ResponseTypes,
   Values,
 };
-
-// Game
-// {
-//   id,
-//   users: GameUser[],
-//   channel_id,
-//   team_id,
-//   state: current state of board,
-//   next_move: user_id,
-//   active: bool,
-//   result: {outcome: draw|win, winner: user_id}
-//   start_time
-//   end_time
-// }
-
-// Move - id, game, index, position, user_id, value, timestamp
