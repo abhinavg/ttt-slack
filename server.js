@@ -2,6 +2,7 @@ const challenge = require('./challenge_cmd');
 const current = require('./current_cmd');
 const help = require('./help');
 const models = require('./models');
+const move = require('./move_cmd');
 
 class TTTServer {
   constructor(app, db, token) {
@@ -45,7 +46,7 @@ class TTTServer {
         cmd = new current.CurrentCmd(this.db, body.team_id, body.channel_id, splitText);
         break;
       case models.Commands.Move:
-        cmd = new challenge.ChallengeCmd(this.db, body.team_id, body.channel_id,
+        cmd = new move.MoveCmd(this.db, body.team_id, body.channel_id,
           `@${body.user_name}`, splitText);
         break;
       default:
