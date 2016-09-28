@@ -13,15 +13,8 @@ function hasLine(grid, value) {
   return false;
 }
 
-function hasLine(grid) {
-  for (const line of models.AllLines) {
-    // This logic could be optimized but we prefer readability over performance here.
-    const lineValue = valueAtPositions(grid, line);
-    if ((lineValue !== null) && (lineValue !== models.Values.Empty)) {
-      return lineValue;
-    }
-  }
-  return null;
+function allPositionsFilled(grid) {
+  return lodash.every(models.Positions, pos => grid[pos] !== models.Values.Empty);
 }
 
 function renderLine(grid, line) {
@@ -41,6 +34,7 @@ function render(grid) {
 }
 
 module.exports = {
+  allPositionsFilled,
   hasLine,
   render,
 };
