@@ -77,7 +77,7 @@ class MoveCmd {
       if (game.state[this.position] !== models.Values.Empty) {
         return cb(null, NonEmptyPositionResponse);
       }
-      this.db.makeMove(game, this.position, userIndex, (updateErr, updatedGame) => {
+      this.db.makeMove(game, userIndex, this.position, (updateErr, updatedGame) => {
         if (updateErr) {
           return cb(updateErr);
         }
