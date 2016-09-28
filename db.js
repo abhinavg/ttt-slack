@@ -12,8 +12,8 @@ class DB {
     this.movesCollection = client.collection('moves');
   }
 
-  static computeUpdatedGame(game, userIndex, position) {
-    const updatedGame = lodash.clone(game);
+  static computeUpdatedGame(game, userIndex, position, now) {
+    const updatedGame = lodash.cloneDeep(game);
     const value = game.users[userIndex].value;
     updatedGame.state[position] = value;
     if (grid.hasLine(updatedGame, value)) {
@@ -62,15 +62,15 @@ class DB {
   }
 
   makeMove(game, userIndex, position, cb) {
-    const updatedGame = DB.computeUpdatedGame(game, userIndex, position);
     const now = Date.now();
+    const updatedGame = DB.computeUpdatedGame(game, userIndex, position, now);
     async.auto({
       updateGame: cbAuto => this.gamesCollection.updateOne({ _id: game._id }, updatedGame, cbAuto),
       recordMove: ['updateGame', (results, cbAuto) => {
         this.movesCollection.insertOne({
           game_id: game._id,
-          username: game[userIndex].username,
-          value: game[userIndex].value,
+          username: game.users[userIndex].username,
+          value: game.users[userIndex].value,
           position,
           timestamp: now,
         }, cbAuto);

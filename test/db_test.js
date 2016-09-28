@@ -90,4 +90,39 @@ describe('DB class', () => {
       });
     });
   });
+
+  describe('makeMove', () => {
+    beforeEach(clearDB);
+
+    it('correctly updates games and moves collections when game not finished', (done) => {
+      async.auto({
+        createGame: (cbAuto) => {
+          db.createGame(testTeamID, testChanID, testUsers, 1, cbAuto);
+        },
+        makeMove: ['createGame', ({ createGame }, cbAuto) => {
+          db.makeMove(createGame, 1, '3', cbAuto);
+        }],
+        getGame: ['makeMove', (results, cbAuto) => {
+          db.getActiveGame(testTeamID, testChanID, cbAuto);
+        }],
+        getMove: ['makeMove', ({ makeMove }, cbAuto) => {
+          db.movesCollection.findOne({ game_id: makeMove._id }, cbAuto);
+        }],
+      }, (err, results) => {
+        assert.ifError(err);
+        assert.deepEqual(results.makeMove, results.getGame);
+        assert.equal(results.makeMove.next_move_index, 0);
+        assert.equal(results.makeMove.state['3'], testUsers[1].value);
+        delete results.getMove._id;
+        assert.deepEqual(results.getMove, {
+          game_id: results.makeMove._id,
+          username: testUsers[1].username,
+          value: testUsers[1].value,
+          position: '3',
+          timestamp: 123456,
+        });
+        done();
+      });
+    });
+  });
 });
