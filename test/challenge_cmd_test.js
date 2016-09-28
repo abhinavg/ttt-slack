@@ -78,6 +78,7 @@ describe('Challenge command', () => {
         const expectedResp = {
           response_type: models.ResponseTypes.InChannel,
           attachments: [{
+            fallback: 'Game created. @user2 to move',
             title: 'Current Game',
             fields: [
               { title: 'X', value: '@user1', short: true },

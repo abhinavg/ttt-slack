@@ -77,11 +77,12 @@ class MoveCmd {
       if (game.state[this.position] !== models.Values.Empty) {
         return cb(null, NonEmptyPositionResponse);
       }
+      const fallback = `${this.user} chose position ${this.position}`;
       this.db.makeMove(game, this.position, (updateErr, updatedGame) => {
         if (updateErr) {
           return cb(updateErr);
         }
-        return cb(null, cmdShared.getRenderGameResponse(updatedGame));
+        return cb(null, cmdShared.getRenderGameResponse(updatedGame, fallback));
       });
       return null;
     });

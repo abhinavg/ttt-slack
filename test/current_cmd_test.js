@@ -78,6 +78,7 @@ describe('Current command', () => {
         const expectedResp = {
           response_type: models.ResponseTypes.InChannel,
           attachments: [{
+            fallback: '@user2 to move.',
             title: 'Current Game',
             fields: [
               { title: 'X', value: '@user1', short: true },

@@ -55,7 +55,8 @@ class ChallengeCmd {
         }
         return cb(err);
       }
-      return cb(null, cmdShared.getRenderGameResponse(game));
+      const fallback = `Game created. ${game.users[game.next_move_index].username} to move`;
+      return cb(null, cmdShared.getRenderGameResponse(game, fallback));
     });
   }
 }

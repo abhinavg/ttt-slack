@@ -6,7 +6,7 @@ const NoActiveGameResponse = {
   response_type: models.ResponseTypes.Ephemeral,
 };
 
-function getRenderGameResponse(game) {
+function getRenderGameResponse(game, fallback) {
   const attachmentFields = [];
   let respTitle = 'Current Game';
   for (const user of game.users) {
@@ -44,6 +44,7 @@ function getRenderGameResponse(game) {
       title: respTitle,
       fields: attachmentFields,
       mrkdwn_in: ['fields'],
+      fallback,
     }],
     response_type: models.ResponseTypes.InChannel,
   };

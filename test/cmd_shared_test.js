@@ -44,9 +44,10 @@ describe('cmd_shared', () => {
             },
           ],
           mrkdwn_in: ['fields'],
+          fallback: 'fallback',
         }],
       };
-      assert.deepEqual(cmdShared.getRenderGameResponse(game), expectedResp);
+      assert.deepEqual(cmdShared.getRenderGameResponse(game, 'fallback'), expectedResp);
     });
 
     it('returns correct response for a won game', () => {
@@ -82,9 +83,10 @@ describe('cmd_shared', () => {
             },
           ],
           mrkdwn_in: ['fields'],
+          fallback: 'fallback',
         }],
       };
-      assert.deepEqual(cmdShared.getRenderGameResponse(game), expectedResp);
+      assert.deepEqual(cmdShared.getRenderGameResponse(game, 'fallback'), expectedResp);
     });
 
     it('returns correct response for a drawn game', () => {
@@ -119,9 +121,10 @@ describe('cmd_shared', () => {
             },
           ],
           mrkdwn_in: ['fields'],
+          fallback: 'fallback',
         }],
       };
-      assert.deepEqual(cmdShared.getRenderGameResponse(game), expectedResp);
+      assert.deepEqual(cmdShared.getRenderGameResponse(game, 'fallback'), expectedResp);
     });
   });
 });

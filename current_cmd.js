@@ -35,7 +35,8 @@ class CurrentCmd {
       if (!game) {
         return cb(null, cmdShared.NoActiveGameResponse);
       }
-      return cb(null, cmdShared.getRenderGameResponse(game));
+      const fallback = `${game.users[game.next_move_index].username} to move.`;
+      return cb(null, cmdShared.getRenderGameResponse(game, fallback));
     });
   }
 }
