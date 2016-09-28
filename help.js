@@ -2,7 +2,8 @@ const models = require('./models');
 
 const HelpText = `Get this help text: \`/ttt ${models.Commands.Help}\`
 Challenge someone to a game: \`/ttt ${models.Commands.Challenge} @username\`
-See the current game status: \`/ttt current\``;
+See the current game status: \`/ttt current\`
+Place your move: \`/ttt move [1-9]\``;
 const HelpResponse = {
   text: HelpText,
   response_type: models.ResponseTypes.Ephemeral,
