@@ -50,7 +50,7 @@ class ChallengeCmd {
     ];
     return this.db.createGame(this.teamID, this.channelID, users, 1, (err, game) => {
       if (err) {
-        if (dbModule.DB.isDupError(err)) {
+        if (dbModule.DB.isDupErr(err)) {
           return cb(null, ActiveGameExistsResponse);
         }
         return cb(err);
