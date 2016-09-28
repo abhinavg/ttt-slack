@@ -61,7 +61,9 @@ describe('Challenge command', () => {
 
     it('returns an in channel response with next player if game created', (done) => {
       const game = {
-        next_move: testUser2,
+        users: testUsers,
+        state: models.EmptyState,
+        next_move_index: 1,
       };
       const db = {
         createGame: sinon.stub().yields(null, game),
@@ -75,7 +77,28 @@ describe('Challenge command', () => {
         assert.deepEqual(db.createGame.firstCall.args.slice(0, 4), expectedArgs);
         const expectedResp = {
           response_type: models.ResponseTypes.InChannel,
-          text: `Game created. ${testUser2} has first turn.`,
+          attachments: [{
+            title: 'Current Game',
+            fields: [
+              { title: 'X', value: '@user1', short: true },
+              { title: 'O', value: '@user2', short: true },
+              {
+                title: 'Board State',
+                value: `\`\`\`|   |   |   |
+|---+---+---|
+|   |   |   |
+|---+---+---|
+|   |   |   |\`\`\``,
+                short: true,
+              },
+              {
+                title: 'Next Move',
+                value: '@user2',
+                short: true,
+              },
+            ],
+            mrkdwn_in: ['fields'],
+          }],
         };
         assert.deepEqual(resp, expectedResp);
         done();

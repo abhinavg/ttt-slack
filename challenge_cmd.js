@@ -1,3 +1,4 @@
+const cmdShared = require('./cmd_shared');
 const models = require('./models');
 
 const InvalidChallengeResponse = {
@@ -47,11 +48,7 @@ class ChallengeCmd {
       if (err) {
         return cb(err);
       }
-      const validResponse = {
-        text: `Game created. ${game.next_move} has first turn.`,
-        response_type: models.ResponseTypes.InChannel,
-      };
-      return cb(null, validResponse);
+      return cb(null, cmdShared.getRenderGameResponse(game));
     });
   }
 }
