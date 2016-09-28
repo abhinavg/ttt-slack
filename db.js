@@ -16,7 +16,7 @@ class DB {
     const updatedGame = lodash.cloneDeep(game);
     const value = game.users[userIndex].value;
     updatedGame.state[position] = value;
-    if (grid.hasLine(updatedGame, value)) {
+    if (grid.hasLine(updatedGame.state, value)) {
       updatedGame.winner_index = userIndex;
       updatedGame.active = false;
       updatedGame.end_time = now;

@@ -21,7 +21,7 @@ function getRenderGameResponse(game) {
     value: `\`\`\`${grid.render(game.state)}\`\`\``,
     short: true,
   });
-  if (game.next_move_index >= 0) {
+  if (game.next_move_index != null) {
     attachmentFields.push({
       title: 'Next Move',
       value: game.users[game.next_move_index].username,
@@ -30,7 +30,7 @@ function getRenderGameResponse(game) {
   } else {
     respTitle = 'Game Over';
     let result = 'Draw';
-    if (game.winner_index >= 0) {
+    if (game.winner_index != null) {
       result = `${game.users[game.winner_index].username} Won!`;
     }
     attachmentFields.push({
