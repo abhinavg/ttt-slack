@@ -73,8 +73,8 @@ describe('Current command', () => {
         assert.deepEqual(db.getActiveGame.firstCall.args.slice(0, 2), expectedArgs);
         const expectedResp = {
           response_type: models.ResponseTypes.InChannel,
-          text: 'Current Game',
           attachments: [{
+            title: 'Current Game',
             fields: [
               { title: 'X', value: '@user1', short: true },
               { title: 'O', value: '@user2', short: true },
@@ -93,6 +93,8 @@ describe('Current command', () => {
                 short: true,
               },
             ],
+            fallback: '@user2 has the next move',
+            mrkdwn_in: ['fields'],
           }],
         };
         assert.deepEqual(resp, expectedResp);
