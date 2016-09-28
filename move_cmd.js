@@ -77,11 +77,11 @@ class MoveCmd {
       if (game.state[this.position] !== models.Values.Empty) {
         return cb(null, NonEmptyPositionResponse);
       }
-      this.db.makeMove(game, userIndex, this.position, (updateErr, updatedGame) => {
+      this.db.makeMove(game, this.position, (updateErr, updatedGame) => {
         if (updateErr) {
           return cb(updateErr);
         }
-        return cmdShared.getRenderGameResponse(updatedGame);
+        return cb(null, cmdShared.getRenderGameResponse(updatedGame));
       });
       return null;
     });

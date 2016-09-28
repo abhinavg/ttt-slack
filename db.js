@@ -19,12 +19,12 @@ class DB {
     if (grid.hasLine(updatedGame, value)) {
       updatedGame.winner_index = userIndex;
       updatedGame.active = false;
-      updatedGame.end_time = Date.now();
+      updatedGame.end_time = now;
       updatedGame.next_move_index = null;
     } else if (grid.allPositionsFilled(updatedGame.state)) {
       updatedGame.winner_index = null;
       updatedGame.active = false;
-      updatedGame.end_time = Date.now();
+      updatedGame.end_time = now;
       updatedGame.next_move_index = null;
     } else {
       updatedGame.next_move_index = (userIndex + 1) % game.users.length;
@@ -61,11 +61,14 @@ class DB {
     });
   }
 
-  makeMove(game, userIndex, position, cb) {
+  makeMove(game, position, cb) {
     const now = Date.now();
+    const userIndex = game.next_move_index;
     const updatedGame = DB.computeUpdatedGame(game, userIndex, position, now);
     async.auto({
-      updateGame: cbAuto => this.gamesCollection.updateOne({ _id: game._id }, updatedGame, cbAuto),
+      updateGame: cbAuto => {
+        this.gamesCollection.updateOne({ _id: game._id }, updatedGame, cbAuto);
+      },
       recordMove: ['updateGame', (results, cbAuto) => {
         this.movesCollection.insertOne({
           game_id: game._id,

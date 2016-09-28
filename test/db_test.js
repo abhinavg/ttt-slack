@@ -100,7 +100,7 @@ describe('DB class', () => {
           db.createGame(testTeamID, testChanID, testUsers, 1, cbAuto);
         },
         makeMove: ['createGame', ({ createGame }, cbAuto) => {
-          db.makeMove(createGame, 1, '3', cbAuto);
+          db.makeMove(createGame, '3', cbAuto);
         }],
         getGame: ['makeMove', (results, cbAuto) => {
           db.getActiveGame(testTeamID, testChanID, cbAuto);
