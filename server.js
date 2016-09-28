@@ -51,6 +51,7 @@ class TTTServer {
     console.log(`Request Body: ${JSON.stringify(req.body)}`);
     const cmd = this.getCommand(req.body);
     cmd.run((err, response) => {
+      console.log(`Response: ${JSON.stringify({ err, body: response })}`);
       if (err) {
         return next(err);
       }
