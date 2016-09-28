@@ -29,3 +29,11 @@
 * Better display for the game board.
 * Actionable content on `current` if player has the next move.
 * Should `current` be In channel?
+
+# Next Actions:
+* Basic command parser.
+* Implement help and also use in default case.
+* Implement challenge.
+* Implement current.
+* Implement win checker.
+* Implement move.
