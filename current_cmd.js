@@ -2,7 +2,7 @@ const grid = require('./grid');
 const models = require('./models');
 
 const NoActiveGameResponse = {
-  text: `There is no active game in this channel. Challenge a user using \`/ttt ${models.Commands.Challenge} @username\``,
+  text: `There is no active game in this channel. Challenge someone with \`/ttt ${models.Commands.Challenge} @username\``,
   response_type: models.ResponseTypes.Ephemeral,
 };
 
@@ -41,9 +41,10 @@ class CurrentCmd {
     });
     return {
       text: 'Current Game',
-      attachments: [
-        { fields: attachmentFields },
-      ],
+      attachments: [{
+        fields: attachmentFields,
+        mrkdwn_in: ['fields'],
+      }],
       response_type: models.ResponseTypes.InChannel,
     };
   }
