@@ -66,6 +66,17 @@ describe('DB class', () => {
         return done();
       });
     });
+
+    it('throws an isDupErr error when trying to create a conflicting active game', (done) => {
+      db.createGame(testTeamID, testChanID, testUsers, 1, (err1) => {
+        assert.ifError(err1);
+        db.createGame(testTeamID, testChanID, testUsers, 0, (err2) => {
+          assert(err2);
+          assert(dbModule.DB.isDupErr(err2));
+          done();
+        });
+      });
+    });
   });
 
   describe('getActiveGame', () => {

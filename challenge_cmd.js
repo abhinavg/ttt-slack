@@ -1,11 +1,16 @@
 const cmdShared = require('./cmd_shared');
+const dbModule = require('./db');
 const models = require('./models');
 
 const InvalidChallengeResponse = {
   text: `I didn't understand that command. Challenge a user using \`/ttt ${models.Commands.Challenge} @username\``,
   response_type: models.ResponseTypes.Ephemeral,
 };
-
+const ActiveGameExistsResponse = {
+  text: 'There is already an active game in this channel. It must be finished before starting a' +
+  'one',
+  response_type: models.ResponseTypes.Ephemeral,
+};
 const SelfChallengeResponse = {
   text: 'Nice try, but you can\'t challenge yourself. Please pick someone else.',
   response_type: models.ResponseTypes.Ephemeral,
@@ -43,9 +48,11 @@ class ChallengeCmd {
       { username: this.challenger, value: models.Values.Cross },
       { username: this.challenged, value: models.Values.Naught },
     ];
-    // TODO: Handle the case when an active game exists.
     return this.db.createGame(this.teamID, this.channelID, users, 1, (err, game) => {
       if (err) {
+        if (dbModule.DB.isDupError(err)) {
+          return cb(null, ActiveGameExistsResponse);
+        }
         return cb(err);
       }
       return cb(null, cmdShared.getRenderGameResponse(game));

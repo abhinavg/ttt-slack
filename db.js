@@ -12,6 +12,11 @@ class DB {
     this.movesCollection = client.collection('moves');
   }
 
+  // Somewhat brittle, but there isn't anything in the driver to tell which error comes from a dup.
+  static isDupErr(err) {
+    return err.code && err.code === 11000;
+  }
+
   static computeUpdatedGame(game, userIndex, position, now) {
     const updatedGame = lodash.cloneDeep(game);
     const value = game.users[userIndex].value;
@@ -42,6 +47,9 @@ class DB {
     this.gamesCollection.findOne(query, cb);
   }
 
+  // A unique index on the underlying table ensures that we never have more than 1 active game in
+  // a channel. In these cases, createGame will throw an error which can then be checked using the
+  // isDupErr method.
   createGame(teamID, channelID, users, nextMoveIndex, cb) {
     const game = {
       active: true,
