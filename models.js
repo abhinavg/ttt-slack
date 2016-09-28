@@ -26,8 +26,9 @@ for (const postion of Positions) {
 }
 
 const Commands = {
-  Help: 'help',
   Challenge: 'challenge',
+  Current: 'current',
+  Help: 'help',
 };
 
 const ResponseTypes = {

@@ -1,4 +1,5 @@
 const challenge = require('./challenge_cmd');
+const current = require('./current_cmd');
 const help = require('./help');
 const models = require('./models');
 
@@ -39,6 +40,9 @@ class TTTServer {
       case models.Commands.Challenge:
         cmd = new challenge.ChallengeCmd(this.db, body.team_id, body.channel_id,
           `@${body.user_name}`, splitText);
+        break;
+      case models.Commands.Current:
+        cmd = new current.CurrentCmd(this.db, body.team_id, body.channel_id, splitText);
         break;
       default:
         cmd = help.InvalidCmd;
